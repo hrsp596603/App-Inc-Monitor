@@ -15,28 +15,58 @@ class NotificationManager:
         
     def filter_and_notify(self, analyzed_items: List[Dict]):
         """
-        過濾並發送通知
-        (目前實作邏輯: 發送「負面 Negative」 或「重大正向 Positive」的新聞)
+        過濾並發送通知，改作單一彙整推播報表
         """
+        positive_items = []
+        negative_items = []
+        neutral_items = []
+        
         for item in analyzed_items:
             sentiment = item.get("sentiment", "Neutral")
+            if sentiment == "Positive":
+                positive_items.append(item)
+            elif sentiment == "Negative":
+                negative_items.append(item)
+            else:
+                neutral_items.append(item)
+                
+        total_filtered = len(positive_items) + len(negative_items) + len(neutral_items)
+        if total_filtered == 0:
+            logger.info("無任何新聞資料，不觸發推播。")
+            return
             
-            # 定義推播規則：只推播非中立的新聞
-            if sentiment in ["Negative", "Positive"]:
-                message = self._format_message(item)
-                logger.info(f"觸發推播 ({sentiment}): {item['title']}")
+        # 組裝彙整訊息
+        message = f"📊 [AppleInc 輿情日報彙整]\n"
+        message += f"總計篩選重點新聞: {total_filtered} 篇\n"
+        message += f"(🟢 正面: {len(positive_items)} 篇 / 🔴 負面: {len(negative_items)} 篇 / ⚪ 中立: {len(neutral_items)} 篇)\n\n"
+        message += "【重點摘要整理】\n=================\n"
+        
+        items_to_notify = positive_items + negative_items + neutral_items
+        for idx, item in enumerate(items_to_notify, 1):
+            message += f"{idx}. {self._format_single_item(item)}\n\n"
+            
+        logger.info(f"觸發單一彙整推播，共涵蓋 {total_filtered} 篇文章")
+        self._send_line(message)
+        self._send_telegram(message)
                 
-                self._send_line(message)
-                self._send_telegram(message)
-                
-    def _format_message(self, item: Dict) -> str:
-        emoji = "🔴" if item.get("sentiment") == "Negative" else "🟢"
-        return f"{emoji} [AppleInc 監測通知]\n\n" \
-               f"標題: {item['title']}\n" \
-               f"情緒: {item.get('sentiment')}\n" \
-               f"內容: {item['content']}\n" \
-               f"連結: {item['url']}\n" \
-               f"來源: {item['source']}"
+    def _format_single_item(self, item: Dict) -> str:
+        sentiment = item.get("sentiment", "Neutral")
+        if sentiment == "Negative":
+            emoji = "🔴"
+        elif sentiment == "Positive":
+            emoji = "🟢"
+        else:
+            emoji = "⚪"
+            
+        title = item.get("title_zh") or item.get("title", "無標題")
+        content = item.get("content_zh") or item.get("content", "無內文")
+        
+        if len(content) > 60:
+            content = content[:60] + "..."
+        
+        return f"{emoji} 標題: {title}\n" \
+               f"   摘要: {content}\n" \
+               f"   網址: {item.get('url', '')}"
 
     def _send_line(self, message: str):
         if not self.line_token:
@@ -48,4 +78,20 @@ class NotificationManager:
         if not self.telegram_token or not self.telegram_chat_id:
             logger.debug(f"[Mock Telegram] 訊息已推播: \n{message}")
             return
-        logger.info("TODO: 實作 Telegram Bot API 串接")
+            
+        url = f"https://api.telegram.org/bot{self.telegram_token}/sendMessage"
+        payload = {
+            "chat_id": self.telegram_chat_id,
+            "text": message,
+            "disable_web_page_preview": False
+        }
+        
+        try:
+            import requests
+            response = requests.post(url, json=payload, timeout=10)
+            if response.status_code == 200:
+                logger.info("✅ Telegram 推播發送成功")
+            else:
+                logger.error(f"❌ Telegram 推播失敗: API 回應 {response.status_code} - {response.text}")
+        except Exception as e:
+            logger.error(f"❌ Telegram 發送發生例外錯誤: {e}")
