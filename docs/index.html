@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AppleInc 輿論監控系統 — 即時追蹤 Apple 相關新聞與 AI 情緒分析報告">
+    <title>AppleInc Monitor | 輿論監控樞紐</title>
+    <!-- Use Google Fonts for premium typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+
+<!-- Animated Background Mesh -->
+<div class="bg-mesh">
+    <div class="mesh-blob blob-1"></div>
+    <div class="mesh-blob blob-2"></div>
+    <div class="mesh-blob blob-3"></div>
+</div>
+
+<div class="app-container">
+    <!-- Navbar -->
+    <nav class="glass-nav">
+        <div class="nav-content">
+            <div class="nav-brand">
+                <div class="brand-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="url(#gradient)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <defs>
+                            <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#3b82f6" />
+                                <stop offset="100%" stop-color="#8b5cf6" />
+                            </linearGradient>
+                        </defs>
+                        <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                    </svg>
+                </div>
+                <h1>AppleInc<span>.Monitor</span></h1>
+            </div>
+            <div class="nav-status">
+                <span class="pulse-dot"></span>
+                <span class="status-text">系統即時監控中</span>
+            </div>
+        </div>
+    </nav>
+
+    <main class="dashboard">
+        <!-- Dashboard Header & KPI -->
+        <header class="dashboard-header animate-fade-in">
+            <div class="header-titles">
+                <h2 class="page-title">輿論監測樞紐</h2>
+                <p class="page-subtitle">AI 驅動的即時新聞分析與情緒判讀</p>
+            </div>
+            
+            
+            <div class="kpi-grid">
+                <div class="kpi-card glass-panel" style="--delay: 0.1s">
+                    <div class="kpi-icon">📊</div>
+                    <div class="kpi-info">
+                        <span class="kpi-value">5</span>
+                        <span class="kpi-label">總分析篇數</span>
+                    </div>
+                </div>
+                <div class="kpi-card glass-panel positive-glow" style="--delay: 0.2s">
+                    <div class="kpi-icon">📈</div>
+                    <div class="kpi-info">
+                        <span class="kpi-value positive-text">2</span>
+                        <span class="kpi-label">正面報導</span>
+                    </div>
+                </div>
+                <div class="kpi-card glass-panel negative-glow" style="--delay: 0.3s">
+                    <div class="kpi-icon">📉</div>
+                    <div class="kpi-info">
+                        <span class="kpi-value negative-text">1</span>
+                        <span class="kpi-label">負面預警</span>
+                    </div>
+                </div>
+            </div>
+            
+        </header>
+
+        <!-- Dynamic Feed -->
+        <section class="feed-section">
+            <div class="section-heading animate-fade-in" style="--delay: 0.4s">
+                <h3>即時情報流</h3>
+                <div class="heading-line"></div>
+            </div>
+            
+            
+            <div class="news-grid">
+                
+                <article class="news-card glass-panel animate-slide-up positive" style="--delay: 0.5s">
+                    <div class="card-glow"></div>
+                    
+                    <div class="card-top">
+                        <div class="sentiment-indicator">
+                            <span class="indicator-dot"></span>
+                            <span class="indicator-text">Positive</span>
+                        </div>
+                        <div class="source-badge">
+                            <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+                            www.gsmarena.com
+                        </div>
+                    </div>
+
+                    <div class="card-content">
+                        <h4 class="title-zh">傳聞：iPhone 19e 可能會搭載 ProMotion 顯示器 - GSMArena.com 新聞 - GSMArena.com</h4>
+                        <p class="title-en text-muted">Rumor: iPhone 19e may bring ProMotion display - GSMArena.com news - GSMArena.com</p>
+                        
+                        <div class="content-body">
+                            <p class="content-zh">根據 ZDNet Korea 的一份新報告，Apple 目前正在開發一種新的 LTPO+ 技術，該技術使用氧化物材料作為開關和驅動電晶體，從而提高電源效率和更快的響應時間。
+
+iPhone 17e
+
+這項新的顯示技術預計將在即將推出的 iPhone 18 Pro 系列、下一代 iPhone Air 和可摺疊 iPhone 上首次亮相。如果成功應用於這些高階設備，常規的 LTPO 面板將會下放到 iPhone 19e。
+
+距離 iPhone 17e 發布還不到一週，但我們已經收到了其繼任者的繼任者的第一批傳聞。預計將於 2028 年初推出的 iPhone 19e，現在傳聞將會搭載 ProMotion 顯示器。在 Apple 的術語中，這是一種可變刷新率面板，對於預算型的「e」系列來說將是一個突破，因為該系列迄今為止一直僅限於 60Hz 面板。</p>
+                        </div>
+                    </div>
+
+                    <div class="card-actions">
+                        <a href="https://www.gsmarena.com/rumor_iphone_19e_may_bring_promotion_display-news-71995.php" target="_blank" rel="noopener noreferrer" class="read-more-btn">
+                            <span>閱讀完整報導</span>
+                            <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                        </a>
+                    </div>
+                </article>
+                
+                <article class="news-card glass-panel animate-slide-up neutral" style="--delay: 0.6000000000000001s">
+                    <div class="card-glow"></div>
+                    
+                    <div class="card-top">
+                        <div class="sentiment-indicator">
+                            <span class="indicator-dot"></span>
+                            <span class="indicator-text">Neutral</span>
+                        </div>
+                        <div class="source-badge">
+                            <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+                            www.macrumors.com
+                        </div>
+                    </div>
+
+                    <div class="card-content">
+                        <h4 class="title-zh">Apple TV 即將問世近 20 年 - MacRumors</h4>
+                        <p class="title-en text-muted">Apple TV Is Now Almost 20 Years Old - MacRumors</p>
+                        
+                        <div class="content-body">
+                            <p class="content-zh">2010 年，它取消了內建硬碟，轉向更小、專注於串流的設計。2015 年 tvOS 和 App Store 的推出標誌著一個重要的轉捩點，實現了第三方應用程式和遊戲。Apple 後來在 2017 年增加了 4K 支援，並持續迭代更快的晶片，最終推出了目前由 A15 仿生晶片驅動的型號。[...] 購買指南：Apple TV (不建議購買)
+
+相關論壇：Apple TV 和家庭劇院
+
+[122 則留言]
+
+## 熱門報導
+
+### Apple 今天又發布了一款新產品
+
+太平洋夏令時間 2026 年 3 月 20 日星期五下午 2:39，作者：Joe Rossignol
+
+Apple 在今年三月迄今已推出了多達九款新產品，包括 iPhone 17e、搭載 M4 晶片的 iPad Air 型號、搭載 M5 晶片的 MacBook Air 型號、搭載 M5 Pro 和 M5 Max 晶片的 MacBook Pro 型號、全新的 MacBook Neo、更新的 Studio Display、更高階的 Studio Display XDR、AirPods Max 2，以及現在的 Nike Powerbeats Pro 2。iPhone 17e 具有與...相同的整體設計。
+
+閱讀完整文章
+
+### iPhone 18 Pro 將於今年稍後推出，具備這 12 項新功能
+
+太平洋夏令時間 2026 年 3 月 18 日星期三上午 7:39，作者：Joe Rossignol [...] AirPods Max 2
+
+3 月 25 日預購，4 月初上市
+
+更新了 H2 晶片，以提升音訊性能和新功能。
+
+WWDC 2026
+
+2026 年 6 月
+
+Apple 的年度開發者大會，屆時將揭曉 iOS 27、macOS 27 等。
+
+iOS 27
+
+2026 年 6 月
+
+Siri 改進、未來可摺疊 iPhone 的優化等。6 月在 WWDC 上介紹，秋季發布。
+
+macOS 27
+
+2026 年 6 月
+
+更智慧的 Siri、未來 MacBook Pro 的觸控優化、以穩定性為重點的更新等。6 月在 WWDC 上介紹，秋季發布。
+
+• Mac mini
+
+• Mac Studio
+
+• iPhone Fold
+
+• iPhone 18 Pro
+
+• 智慧家庭中樞
+
+• Apple TV
+
+• HomePod mini
+
+• iPhone 18
+
+查看完整產品行事曆
+
+## 其他報導
+
+Apple 今天又發布了一款新產品
+
+2 天前，作者：Joe Rossignol</p>
+                        </div>
+                    </div>
+
+                    <div class="card-actions">
+                        <a href="https://www.macrumors.com/2026/03/21/apple-tv-now-almost-20-years-old/" target="_blank" rel="noopener noreferrer" class="read-more-btn">
+                            <span>閱讀完整報導</span>
+                            <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                        </a>
+                    </div>
+                </article>
+                
+                <article class="news-card glass-panel animate-slide-up neutral" style="--delay: 0.7000000000000001s">
+                    <div class="card-glow"></div>
+                    
+                    <div class="card-top">
+                        <div class="sentiment-indicator">
+                            <span class="indicator-dot"></span>
+                            <span class="indicator-text">Neutral</span>
+                        </div>
+                        <div class="source-badge">
+                            <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+                            www.macrumors.com
+                        </div>
+                    </div>
+
+                    <div class="card-content">
+                        <h4 class="title-zh">蘋果將於今年四月推出更多新硬體 — MacRumors</h4>
+                        <p class="title-en text-muted">Apple to Launch More New Hardware This April - MacRumors</p>
+                        
+                        <div class="content-body">
+                            <p class="content-zh">2026 年 3 月 17 日星期二，太平洋夏令時間上午 9:25，Joe Rossignol 撰寫
+
+蘋果公司本月至今已發布了多達八款新產品，包括 iPhone 17e、搭載 M4 晶片的 iPad Air 機型、搭載 M5 晶片的 MacBook Air 機型、搭載 M5 Pro 和 M5 Max 晶片的 MacBook Pro 機型、全新的 MacBook Neo、更新的 Studio Display、更高階的 Studio Display XDR，以及本週的 AirPods Max 2。iPhone 17e 的整體設計與 iPhone...
+
+閱讀完整文章
+
+## 下一篇報導
+
+蘋果去年從生成式 AI 應用程式中賺取近 9 億美元
+
+## 影片
+
+AirPods Max 2 驚喜發布——值得升級嗎？| 第 186 集
+
+蘋果 3,299 美元的 Studio Display XDR 令人難以置信……但有一個問題
+
+蘋果 AirPods Max 2 終於來了——所有新功能都在這裡 [...] 閱讀完整文章 • 78 則評論
+
+### 蘋果 iOS 26.4 的發布說明
+
+2026 年 3 月 18 日星期三，太平洋夏令時間上午 11:56，Juli Clover 撰寫
+
+蘋果向開發者和公開測試者提供了 iOS 26.4 和 iPadOS 26.4 的發布候選版本，這意味著我們最快將於下週看到公開發布。這些 RC 版本的軟體包含蘋果的官方發布說明，為我們提供了更新內容的最終細節。Apple Music - 播放列表遊樂場（測試版）可根據您的...生成播放列表
+
+閱讀完整文章 • 104 則評論
+
+### 蘋果本月已發布八款新產品
+
+2026 年 3 月 17 日星期二，太平洋夏令時間上午 9:25，Joe Rossignol 撰寫 [...] 跳至內容
+
+有任何消息要告訴我們嗎？請告知我們
+
+a. 發送電子郵件給我們
+b. 匿名表格
+
+# 蘋果將於今年四月推出更多新硬體
+
+Tim Hardwick 撰寫
+
+蘋果尚未結束。在三月宣布推出七款新產品後——包括 iPhone 17e、iPad Air、MacBook Air、MacBook Pro、MacBook Neo、Studio Display 和 Studio Display XDR——該公司在未來幾週內還有一次發布計畫（至少據我們所知）。
+
+AirPods Max 2 將於 3 月 25 日開放預購，並於四月初開始供貨。這款更新的耳罩式耳機有午夜色、星光色、橘色、紫色和藍色可供選擇——與上一代顏色相同。</p>
+                        </div>
+                    </div>
+
+                    <div class="card-actions">
+                        <a href="https://www.macrumors.com/2026/03/20/apple-to-launch-more-new-hardware-this-april/" target="_blank" rel="noopener noreferrer" class="read-more-btn">
+                            <span>閱讀完整報導</span>
+                            <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                        </a>
+                    </div>
+                </article>
+                
+                <article class="news-card glass-panel animate-slide-up negative" style="--delay: 0.8s">
+                    <div class="card-glow"></div>
+                    
+                    <div class="card-top">
+                        <div class="sentiment-indicator">
+                            <span class="indicator-dot"></span>
+                            <span class="indicator-text">Negative</span>
+                        </div>
+                        <div class="source-badge">
+                            <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+                            www.bloomberg.com
+                        </div>
+                    </div>
+
+                    <div class="card-content">
+                        <h4 class="title-zh">蘋果的 AirPods Max 2 模糊了行銷與創新之間的界線 - Bloomberg.com</h4>
+                        <p class="title-en text-muted">Apple’s AirPods Max 2 Blurs the Lines Between Marketing and Innovation - Bloomberg.com</p>
+                        
+                        <div class="content-body">
+                            <p class="content-zh">新款 AirPods Max 耳機顯示，行銷與真正創新之間的界線正在模糊。此外：蘋果零售店提高了外接儲存的價格；HomePod 和 Apple TV 的庫存再次減少；該公司的家庭硬體主管已跳槽至 Oura。
+
+上週在 Power On 專欄中提到：蘋果的 Liquid Glass 介面短期內不會有任何進展。
+
+### 開場
+
+過去一週，在更新了多款 Mac、iPhone 17e 和 iPad Air 後不久，蘋果公司宣布推出 AirPods Max 2。[...] 蘋果至少從去年起就準備好了新版 Apple TV 和 HomePod mini，但一直沒有發布，因為該公司正在等待新的 Siri 和其他人工智慧升級。這些功能仍遠未準備就緒，因此如果新硬體確實即將推出，那可能意味著蘋果只是厭倦了等待。（儘管這些 AI 功能對於一個獨立的、期待已久的家庭中樞至關重要，但對於 HomePod 和 Apple TV 來說，它們只是一個不錯的附加功能。）[...] 問：入門級 iPad 的更新在哪裡？</p>
+                        </div>
+                    </div>
+
+                    <div class="card-actions">
+                        <a href="https://www.bloomberg.com/news/newsletters/2026-03-22/apple-s-airpods-max-2-blurs-the-lines-between-marketing-and-innovation-mn1pfx3h" target="_blank" rel="noopener noreferrer" class="read-more-btn">
+                            <span>閱讀完整報導</span>
+                            <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                        </a>
+                    </div>
+                </article>
+                
+                <article class="news-card glass-panel animate-slide-up positive" style="--delay: 0.9s">
+                    <div class="card-glow"></div>
+                    
+                    <div class="card-top">
+                        <div class="sentiment-indicator">
+                            <span class="indicator-dot"></span>
+                            <span class="indicator-text">Positive</span>
+                        </div>
+                        <div class="source-badge">
+                            <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+                            www.macrumors.com
+                        </div>
+                    </div>
+
+                    <div class="card-content">
+                        <h4 class="title-zh">新版 Apple TV 和 HomePod Mini 仍「準備就緒」待發布 - MacRumors</h4>
+                        <p class="title-en text-muted">New Apple TV and HomePod Mini Remain 'Ready' to Launch - MacRumors</p>
+                        
+                        <div class="content-body">
+                            <p class="content-zh">目前的 Apple TV 4K 於 2022 年 10 月首次亮相，而 HomePod mini 則於 2020 年 10 月推出，因此這兩款設備都到了升級的時候。
+
+相關彙整：Apple TV, HomePod mini
+
+標籤：彭博社, 馬克·古爾曼
+
+購買指南：Apple TV (勿購買), HomePod Mini (勿購買)
+
+相關論壇：Apple TV 與家庭劇院, HomePod, HomeKit, CarPlay, 家庭與汽車科技
+
+[59 則留言]
+
+## 熱門報導
+
+### 蘋果今天又發布了一款新產品
+
+太平洋時間 2026 年 3 月 20 日星期五下午 2:39，作者：Joe Rossignol [...] 2 天前，作者：Joe Rossignol
+
+蘋果表示 iPhone 駕照將在美國這 7 個州推出
+
+2 天前，作者：Joe Rossignol
+
+蘋果將於今年四月推出更多新硬體
+
+2 天前，作者：Tim Hardwick
+
+AirPods Max 可能仍會獲得更大升級
+
+4 天前，作者：Joe Rossignol
+
+X 服務中斷：Twitter 在 iPhone 和網頁上無法使用
+
+4 天前，作者：Joe Rossignol [...] AirPods Max 2
+
+3 月 25 日預購，4 月初發布
+
+更新了 H2 晶片，以提升音訊性能和新功能。
+
+WWDC 2026
+
+2026 年 6 月
+
+蘋果年度開發者大會，將揭曉 iOS 27、macOS 27 等。
+
+iOS 27
+
+2026 年 6 月
+
+Siri 改進、未來可摺疊 iPhone 的優化等。將於 WWDC 在 6 月推出，並於秋季發布。
+
+macOS 27
+
+2026 年 6 月
+
+更智慧的 Siri、未來 MacBook Pro 的觸控優化、以穩定性為重點的更新等。將於 WWDC 在 6 月推出，並於秋季發布。
+
+• Mac mini
+
+• Mac Studio
+
+• iPhone Fold
+
+• iPhone 18 Pro
+
+• 智慧家庭中樞
+
+• Apple TV
+
+• HomePod mini
+
+• iPhone 18
+
+查看完整產品行事曆
+
+## 其他報導
+
+蘋果今天又發布了一款新產品
+
+2 天前，作者：Joe Rossignol</p>
+                        </div>
+                    </div>
+
+                    <div class="card-actions">
+                        <a href="https://www.macrumors.com/2026/03/22/new-apple-tv-and-homepod-mini-remain-ready/" target="_blank" rel="noopener noreferrer" class="read-more-btn">
+                            <span>閱讀完整報導</span>
+                            <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                        </a>
+                    </div>
+                </article>
+                
+            </div>
+            
+        </section>
+    </main>
+
+    <footer class="app-footer">
+        <div class="footer-content">
+            <p>AppleInc Monitor &copy; 2026. Empowered by LLM AI Sentiment Engine.</p>
+        </div>
+    </footer>
+</div>
+
+</body>
+</html>
