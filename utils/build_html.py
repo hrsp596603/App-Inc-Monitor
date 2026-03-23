@@ -37,12 +37,15 @@ def build_static_dashboard():
         else:
             stats["neutral"] += 1
 
+    import datetime
+    current_date = datetime.datetime.now().strftime("%Y/%m/%d")
+
     # 初始化 Jinja2 環境
     env = Environment(loader=FileSystemLoader(templates_dir))
     template = env.get_template("index.html")
     
     # 渲染為純字串，只需傳入 reports 和 stats。
-    html_content = template.render(reports=reports, stats=stats)
+    html_content = template.render(reports=reports, stats=stats, current_date=current_date)
     
     # 將 /static/style.css 替換為相對路徑 ./style.css，使得能在 GitHub Pages 子路徑運作
     html_content = html_content.replace('href="/static/style.css"', 'href="./style.css"')

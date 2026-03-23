@@ -47,10 +47,14 @@ async def read_root(request: Request):
         else:
             stats["neutral"] += 1
 
+    import datetime
+    current_date = datetime.datetime.now().strftime("%Y/%m/%d")
+
     return templates.TemplateResponse("index.html", {
         "request": request, 
         "reports": reports,
-        "stats": stats
+        "stats": stats,
+        "current_date": current_date
     })
 
 if __name__ == "__main__":
