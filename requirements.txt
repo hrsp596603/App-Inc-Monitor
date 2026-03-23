@@ -1,0 +1,26 @@
+# Data Scraper
+requests>=2.31.0
+beautifulsoup4>=4.12.0
+lxml>=4.9.0
+tavily-python>=0.3.3
+
+# LLM / AI
+openai>=1.0.0
+google-genai>=0.1.0
+# anthropic>=0.3.11  # Optional: based on actual provider chosen
+
+# Web / Backend
+fastapi>=0.100.0
+uvicorn>=0.23.0
+jinja2>=3.1.2
+
+# Notifier
+# line-bot-sdk>=3.0.0 # Optional: Line messaging
+# python-telegram-bot>=20.6 # Optional: Telegram bot
+
+# Scheduler
+schedule>=1.2.0
+
+# Utils
+python-dotenv>=1.0.0
+pydantic>=2.0.0

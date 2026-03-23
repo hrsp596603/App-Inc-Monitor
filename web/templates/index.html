@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AppleInc 輿論監控系統 — 即時追蹤 Apple 相關新聞與 AI 情緒分析報告">
+    <title>AppleInc Monitor | 輿論監控樞紐</title>
+    <!-- Use Google Fonts for premium typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<!-- Animated Background Mesh -->
+<div class="bg-mesh">
+    <div class="mesh-blob blob-1"></div>
+    <div class="mesh-blob blob-2"></div>
+    <div class="mesh-blob blob-3"></div>
+</div>
+
+<div class="app-container">
+    <!-- Navbar -->
+    <nav class="glass-nav">
+        <div class="nav-content">
+            <div class="nav-brand">
+                <div class="brand-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="url(#gradient)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <defs>
+                            <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#3b82f6" />
+                                <stop offset="100%" stop-color="#8b5cf6" />
+                            </linearGradient>
+                        </defs>
+                        <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                    </svg>
+                </div>
+                <h1>AppleInc<span>.Monitor</span></h1>
+            </div>
+            <div class="nav-status">
+                <span class="pulse-dot"></span>
+                <span class="status-text">系統即時監控中</span>
+            </div>
+        </div>
+    </nav>
+
+    <main class="dashboard">
+        <!-- Dashboard Header & KPI -->
+        <header class="dashboard-header animate-fade-in">
+            <div class="header-titles">
+                <h2 class="page-title">輿論監測樞紐</h2>
+                <p class="page-subtitle">AI 驅動的即時新聞分析與情緒判讀</p>
+            </div>
+            
+            {% if reports %}
+            <div class="kpi-grid">
+                <div class="kpi-card glass-panel" style="--delay: 0.1s">
+                    <div class="kpi-icon">📊</div>
+                    <div class="kpi-info">
+                        <span class="kpi-value">{{ stats.total }}</span>
+                        <span class="kpi-label">總分析篇數</span>
+                    </div>
+                </div>
+                <div class="kpi-card glass-panel positive-glow" style="--delay: 0.2s">
+                    <div class="kpi-icon">📈</div>
+                    <div class="kpi-info">
+                        <span class="kpi-value positive-text">{{ stats.positive }}</span>
+                        <span class="kpi-label">正面報導</span>
+                    </div>
+                </div>
+                <div class="kpi-card glass-panel negative-glow" style="--delay: 0.3s">
+                    <div class="kpi-icon">📉</div>
+                    <div class="kpi-info">
+                        <span class="kpi-value negative-text">{{ stats.negative }}</span>
+                        <span class="kpi-label">負面預警</span>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </header>
+
+        <!-- Dynamic Feed -->
+        <section class="feed-section">
+            <div class="section-heading animate-fade-in" style="--delay: 0.4s">
+                <h3>即時情報流</h3>
+                <div class="heading-line"></div>
+            </div>
+            
+            {% if reports %}
+            <div class="news-grid">
+                {% for item in reports %}
+                <article class="news-card glass-panel animate-slide-up {{ item.sentiment | lower }}" style="--delay: {{ 0.4 + loop.index * 0.1 }}s">
+                    <div class="card-glow"></div>
+                    
+                    <div class="card-top">
+                        <div class="sentiment-indicator">
+                            <span class="indicator-dot"></span>
+                            <span class="indicator-text">{{ item.sentiment }}</span>
+                        </div>
+                        <div class="source-badge">
+                            <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+                            {{ item.source }}
+                        </div>
+                    </div>
+
+                    <div class="card-content">
+                        <h4 class="title-zh">{% if item.title_zh %}{{ item.title_zh }}{% else %}{{ item.title }}{% endif %}</h4>
+                        <p class="title-en text-muted">{{ item.title }}</p>
+                        
+                        <div class="content-body">
+                            <p class="content-zh">{% if item.content_zh %}{{ item.content_zh }}{% else %}{{ item.content }}{% endif %}</p>
+                        </div>
+                    </div>
+
+                    <div class="card-actions">
+                        <a href="{{ item.url }}" target="_blank" rel="noopener noreferrer" class="read-more-btn">
+                            <span>閱讀完整報導</span>
+                            <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                        </a>
+                    </div>
+                </article>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="empty-state glass-panel animate-slide-up" style="--delay: 0.4s">
+                <div class="empty-animation">
+                    <div class="pulse-ring"></div>
+                    <div class="empty-icon">🎧</div>
+                </div>
+                <h3>等待數據匯流</h3>
+                <p>系統目前尚未蒐集到最新的分析報告。</p>
+                <div class="terminal-box">
+                    <div class="terminal-header">
+                        <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+                    </div>
+                    <code>$ python main.py</code>
+                </div>
+                <p class="terminal-hint">請透過指令發動資料搜集爬蟲與 AI 分析管線</p>
+            </div>
+            {% endif %}
+        </section>
+    </main>
+
+    <footer class="app-footer">
+        <div class="footer-content">
+            <p>AppleInc Monitor &copy; 2026. Empowered by LLM AI Sentiment Engine.</p>
+        </div>
+    </footer>
+</div>
+
+</body>
+</html>
