@@ -333,9 +333,11 @@ body {
 
 .positive-text { color: var(--positive); }
 .negative-text { color: var(--negative); }
+.neutral-text { color: var(--neutral); }
 
 .positive-glow:hover { box-shadow: 0 12px 40px 0 rgba(16, 185, 129, 0.15); border-color: rgba(16, 185, 129, 0.3); }
 .negative-glow:hover { box-shadow: 0 12px 40px 0 rgba(239, 68, 68, 0.15); border-color: rgba(239, 68, 68, 0.3); }
+.neutral-glow:hover { box-shadow: 0 12px 40px 0 rgba(148, 163, 184, 0.15); border-color: rgba(148, 163, 184, 0.3); }
 
 /* ---- Feed Section ---- */
 .feed-section {
