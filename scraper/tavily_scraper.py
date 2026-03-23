@@ -48,17 +48,24 @@ class TavilyScraper(BaseScraper):
                 search_depth="advanced",
                 max_results=limit,
                 include_raw_content=False,
+                include_images=True,
                 topic="news"
             )
             
             results = []
+            images_list = response.get("images", [])
             for i, res in enumerate(response.get("results", [])):
+                img_url = res.get("image_url", "")
+                if not img_url and images_list and i < len(images_list):
+                    img_url = images_list[i]
+                    
                 results.append({
                     "id": f"tavily_{i}",
                     "source": res.get("url", "").split("/")[2] if "://" in res.get("url", "") else "Web Search",
                     "title": res.get("title", ""),
                     "content": res.get("content", ""),
                     "url": res.get("url", ""),
+                    "image_url": img_url,
                     "published_at": datetime.datetime.now(datetime.timezone.utc).isoformat()
                 })
             
