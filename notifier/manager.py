@@ -69,10 +69,37 @@ class NotificationManager:
                f"   網址: {item.get('url', '')}"
 
     def _send_line(self, message: str):
-        if not self.line_token:
-            logger.debug(f"[Mock Line] 訊息已推播: \n{message}")
+        line_token = os.getenv("LINE_CHANNEL_ACCESS_TOKEN")
+        line_user_id = os.getenv("LINE_USER_ID")
+        
+        if not line_token or not line_user_id:
+            logger.debug(f"[Mock Line] 訊息已推播 (未設定 Token): \n{message}")
             return
-        logger.info("TODO: 實作 Line Messaging API 串接")
+            
+        url = "https://api.line.me/v2/bot/message/push"
+        headers = {
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {line_token}"
+        }
+        payload = {
+            "to": line_user_id,
+            "messages": [
+                {
+                    "type": "text",
+                    "text": message
+                }
+            ]
+        }
+        
+        try:
+            import requests
+            response = requests.post(url, headers=headers, json=payload, timeout=10)
+            if response.status_code == 200:
+                logger.info("✅ Line 推播發送成功")
+            else:
+                logger.error(f"❌ Line 推播失敗: API 回應 {response.status_code} - {response.text}")
+        except Exception as e:
+            logger.error(f"❌ Line 發送發生例外錯誤: {e}")
         
     def _send_telegram(self, message: str):
         if not self.telegram_token or not self.telegram_chat_id:

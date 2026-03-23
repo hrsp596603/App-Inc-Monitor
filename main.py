@@ -37,6 +37,41 @@ def run_pipeline():
     notifier = NotificationManager()
     notifier.filter_and_notify(analyzed_data)
 
+    # 5. 備份到 GitHub (新增)
+    logger.info("[5] 備份本日報告至 GitHub 與本機特定資料夾...")
+    from utils.github_backup import backup_to_github
+    import datetime
+    import shutil
+    
+    date_str = datetime.datetime.now().strftime("%Y-%m-%d")
+    history_dir = os.path.join(os.path.dirname(__file__), "docs", "history")
+    os.makedirs(history_dir, exist_ok=True)
+    
+    # 使用者指定的額外本機備份目錄
+    extra_backup_dir = "/Users/hongpeiyuan/Documents/Apple Inc. Monitor"
+    os.makedirs(extra_backup_dir, exist_ok=True)
+    
+    source_file = os.path.join(output_dir, "latest_report.json")
+    dest_file = os.path.join(history_dir, f"report_{date_str}.json")
+    extra_dest_file = os.path.join(extra_backup_dir, f"report_{date_str}.json")
+    
+    if os.path.exists(source_file):
+        shutil.copy2(source_file, dest_file)
+        shutil.copy2(source_file, extra_dest_file)  # 額外備份
+        logger.info(f"已額外複製備份至: {extra_dest_file}")
+        
+        # 6. 生成 GitHub Pages 靜態儀表板 (新增)
+        logger.info("[6] 正在轉譯靜態網頁準備部署 GitHub Pages...")
+        try:
+            from utils.build_html import build_static_dashboard
+            build_static_dashboard()
+        except Exception as e:
+            logger.error(f"❌ 靜態網頁轉譯發生錯誤: {e}")
+            
+        backup_to_github(date_str)
+    else:
+        logger.warning(f"找不到最新報告 {source_file}，無法備份。")
+
 if __name__ == "__main__":
     run_pipeline()
     logger.info("✅ Pipeline 單次執行完成。")
