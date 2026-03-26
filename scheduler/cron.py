@@ -31,11 +31,11 @@ def start_scheduler():
     
     # 預設排程 (例如每 X 天執行)
     if interval_days == 1:
-        schedule.every().day.at("02:00").do(job)
+        schedule.every().day.at("16:00").do(job)
     else:
         schedule.every(interval_days).days.do(job)
     
-    logger.info(f"📅 排程已啟動，設定為每 {interval_days} 天（或每天02:00）執行一次。")
+    logger.info(f"📅 排程已啟動，設定為每 {interval_days} 天（或每天16:00）執行一次。")
     logger.info("🕒 即將執行首次背景任務...")
     job() # 啟動時先跑一次
     
