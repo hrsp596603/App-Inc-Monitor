@@ -94,51 +94,62 @@ class SentimentAnalyzer:
 標題: {title}
 內容: {content}
 """
-        raw = ""
-        try:
-            if self.provider == "gemini" and self.gemini_client and genai_types:
-                response = self.gemini_client.models.generate_content(
-                    model="gemini-2.5-flash",
-                    contents=prompt,
-                    config=genai_types.GenerateContentConfig(
-                        temperature=0.0,
-                    ),
-                )
-                raw = response.text
-                if raw is None:
-                    raw = ""
-                raw = raw.strip()
-                import re
-                match = re.search(r"\{.*\}", raw, re.DOTALL)
-                if match:
-                    raw = match.group(0)
-                
-            elif self.provider == "openai" and self.openai_client:
-                response_openai = self.openai_client.chat.completions.create(
-                    model="gpt-3.5-turbo",
-                    messages=[
-                        {"role": "system", "content": "You are a helpful text sentiment analyzer and translator. Always respond in valid JSON only."},
-                        {"role": "user", "content": prompt}
-                    ],
-                    temperature=0.0
-                )
-                raw_content = response_openai.choices[0].message.content
-                if raw_content:
-                    raw = raw_content.strip()
+        for attempt in range(4):
+            raw = ""
+            try:
+                if self.provider == "gemini" and self.gemini_client and genai_types:
+                    response = self.gemini_client.models.generate_content(
+                        model="gemini-2.5-flash",
+                        contents=prompt,
+                        config=genai_types.GenerateContentConfig(
+                            temperature=0.0,
+                        ),
+                    )
+                    raw = response.text
+                    if raw is None:
+                        raw = ""
+                    raw = raw.strip()
                     import re
                     match = re.search(r"\{.*\}", raw, re.DOTALL)
                     if match:
                         raw = match.group(0)
-
-            # 嘗試解析 JSON
-            result = json.loads(raw)
-            return result
-        except json.JSONDecodeError:
-            logger.warning(f"LLM 回傳非 JSON 格式 ({self.provider}): {raw}")
-            return {"sentiment": "Neutral", "title_zh": title, "content_zh": content}
-        except Exception as e:
-            logger.error(f"LLM 呼叫失敗 ({self.provider}): {e}")
-            return {"sentiment": "Neutral", "title_zh": title, "content_zh": content}
+                    
+                elif self.provider == "openai" and self.openai_client:
+                    response_openai = self.openai_client.chat.completions.create(
+                        model="gpt-3.5-turbo",
+                        messages=[
+                            {"role": "system", "content": "You are a helpful text sentiment analyzer and translator. Always respond in valid JSON only."},
+                            {"role": "user", "content": prompt}
+                        ],
+                        temperature=0.0
+                    )
+                    raw_content = response_openai.choices[0].message.content
+                    if raw_content:
+                        raw = raw_content.strip()
+                        import re
+                        match = re.search(r"\{.*\}", raw, re.DOTALL)
+                        if match:
+                            raw = match.group(0)
+    
+                # 嘗試解析 JSON
+                result = json.loads(raw)
+                return result
+            except json.JSONDecodeError:
+                logger.warning(f"LLM 回傳非 JSON 格式 ({self.provider}): {raw}")
+                return {"sentiment": "Neutral", "title_zh": title, "content_zh": content}
+            except Exception as e:
+                err_str = str(e)
+                if "429" in err_str or "RESOURCE_EXHAUSTED" in err_str or "rate limit" in err_str.lower():
+                    logger.warning(f"LLM 翻譯呼叫遇到 Rate Limit (嘗試 {attempt+1}/4)，暫停 20 秒...")
+                    import time
+                    time.sleep(20)
+                    continue
+                else:
+                    logger.error(f"LLM 呼叫失敗 ({self.provider}): {e}")
+                    return {"sentiment": "Neutral", "title_zh": title, "content_zh": content}
+                    
+        logger.error(f"LLM 翻譯連續 4 次遇 Rate Limit 失敗 ({self.provider})")
+        return {"sentiment": "Neutral", "title_zh": title, "content_zh": content}
 
     def _mock_analyze(self, items: List[Dict]) -> List[Dict]:
         """開發與測試用的模擬回傳（含假翻譯）"""
