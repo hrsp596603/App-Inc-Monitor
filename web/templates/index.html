@@ -113,11 +113,9 @@
             <div class="news-grid">
                 {% for item in reports %}
                 <article class="news-card glass-panel animate-slide-up {{ item.sentiment | lower }}" style="--delay: {{ 0.4 + loop.index * 0.1 }}s">
-                    {% if item.image_url %}
                     <div class="card-image-wrapper">
-                        <img src="{{ item.image_url }}" alt="News Thumbnail" class="card-image" loading="lazy" referrerpolicy="no-referrer">
+                        <img src="{{ item.image_url if item.image_url else './default_new_image.png' }}" alt="News Thumbnail" class="card-image" loading="lazy" referrerpolicy="no-referrer">
                     </div>
-                    {% endif %}
                     <div class="card-highlight"></div>
                     
                     <div class="card-top">
