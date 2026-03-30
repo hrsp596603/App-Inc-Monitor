@@ -25,7 +25,7 @@ def get_stats(reports):
             stats["neutral"] += 1
     return stats
 
-def render_page(template, reports, focus_data, current_date, history_files, selected_url, dest_path):
+def render_page(template, reports, focus_data, current_date, history_files, selected_url, dest_path, css_path="./style.css"):
     stats = get_stats(reports)
     html_content = template.render(
         reports=reports, 
@@ -35,7 +35,7 @@ def render_page(template, reports, focus_data, current_date, history_files, sele
         history_files=history_files,
         selected_url=selected_url
     )
-    html_content = html_content.replace('href="/static/style.css"', 'href="./style.css"')
+    html_content = html_content.replace('href="/static/style.css"', f'href="{css_path}"')
     with open(dest_path, "w", encoding="utf-8") as f:
         f.write(html_content)
 
@@ -45,37 +45,49 @@ def build_static_dashboard():
     static_dir = os.path.join(base_dir, "web", "static")
     templates_dir = os.path.join(base_dir, "web", "templates")
     history_dir = os.path.join(base_dir, "docs", "history")
+    archive_dir = os.path.join(base_dir, "archive")
     
-    # 準備歷史清單
-    history_files = []
+    os.makedirs(archive_dir, exist_ok=True)
     
-    # 最新的一筆做為預設 index.html 選項 (使用今日日期)
+    # 解析出基礎清單 (不含路徑的 metadata)
+    base_history = []
+    
     today_str = datetime.datetime.now().strftime("%Y-%m-%d")
     today_display = today_str.replace("-", "/")
     
-    history_files.append({
+    base_history.append({
         "label": f"{today_display} (最新)",
-        "url": "index.html",
-        "raw_date": today_str + "9" # 確保最新一定排在最上方
+        "type": "latest",
+        "raw_date": today_str + "9" 
     })
     
-    # 掃描 history 裡的所有歷史備份
     if os.path.exists(history_dir):
         for f in glob.glob(os.path.join(history_dir, "report_*.json")):
             date_display = parse_date_from_filename(f)
             raw_date = os.path.basename(f).replace("report_", "").replace(".json", "")
-            if raw_date != today_str: # 避免如果當天已經備份過，會出現兩個當天項目
-                history_files.append({
+            if raw_date != today_str: 
+                base_history.append({
                     "label": date_display,
-                    "url": f"{raw_date}.html",
+                    "type": "archive",
+                    "filename": f"{raw_date}.html",
                     "raw_date": raw_date,
                     "file_path": f
                 })
                 
-    # 依日期遞減排序
-    history_files = sorted(history_files, key=lambda x: x["raw_date"], reverse=True)
+    base_history = sorted(base_history, key=lambda x: x["raw_date"], reverse=True)
     
-    # 初始化 Jinja2
+    # 產生根目錄用的路由選單
+    root_nav = []
+    for item in base_history:
+        url = "index.html" if item["type"] == "latest" else f"archive/{item['filename']}"
+        root_nav.append({"label": item["label"], "url": url})
+        
+    # 產生 archive 目錄內用的路由選單
+    archive_nav = []
+    for item in base_history:
+        url = "../index.html" if item["type"] == "latest" else item["filename"]
+        archive_nav.append({"label": item["label"], "url": url})
+    
     env = Environment(loader=FileSystemLoader(templates_dir))
     template = env.get_template("index.html")
 
@@ -92,18 +104,19 @@ def build_static_dashboard():
         with open(latest_focus_path, "r", encoding="utf-8") as f:
             focus_data = json.load(f)
             
-    render_page(template, reports, focus_data, today_display, history_files, "index.html", os.path.join(base_dir, "index.html"))
+    render_page(template, reports, focus_data, today_display, root_nav, "index.html", os.path.join(base_dir, "index.html"), css_path="./style.css")
     logger.info("已生成最新報告: index.html")
     
-    # 2. 生成所有歷史頁面
-    for item in history_files:
-        if "file_path" in item:
+    # 2. 生成所有歷史頁面 (存入 archive/)
+    for item in base_history:
+        if item["type"] == "archive" and "file_path" in item:
             with open(item["file_path"], "r", encoding="utf-8") as f:
                 hist_reports = json.load(f)
             
-            dest_html = os.path.join(base_dir, item["url"])
-            render_page(template, hist_reports, None, item["label"], history_files, item["url"], dest_html)
-            logger.info(f"已生成歷史報告: {item['url']}")
+            dest_html = os.path.join(archive_dir, item["filename"])
+            # url for this page in the archive menu is just its filename
+            render_page(template, hist_reports, None, item["label"], archive_nav, item["filename"], dest_html, css_path="../style.css")
+            logger.info(f"已生成歷史報告: archive/{item['filename']}")
             
     # 同步拷貝 CSS 樣式表
     src_css = os.path.join(static_dir, "style.css")
@@ -111,7 +124,7 @@ def build_static_dashboard():
     if os.path.exists(src_css):
         shutil.copy2(src_css, dest_css)
         
-    logger.info("✅ 靜態網頁切換多頁面與樣式表已成功寫入專案根目錄。")
+    logger.info("✅ 靜態網頁切換多頁面與樣式表已成功寫入專案根目錄與 archive/。")
 
 if __name__ == "__main__":
     build_static_dashboard()
