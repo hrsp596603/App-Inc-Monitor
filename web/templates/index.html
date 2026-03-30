@@ -114,6 +114,30 @@
             {% endif %}
         </header>
 
+        <!-- Sentiment Distribution Bar Chart -->
+        {% if stats.total > 0 %}
+        <section class="sentiment-bar-section animate-fade-in" style="--delay: 0.3s">
+            <div class="sentiment-bar-container glass-panel">
+                <div class="sentiment-bar-labels">
+                    <span class="positive-text">正面 {{ stats.positive }}</span>
+                    <span class="neutral-text">中立 {{ stats.neutral }}</span>
+                    <span class="negative-text">負面 {{ stats.negative }}</span>
+                </div>
+                <div class="sentiment-stacked-bar">
+                    {% if stats.positive > 0 %}
+                    <div class="bar-segment bar-positive" style="width: {{ (stats.positive / stats.total * 100)|round(1) }}%;"></div>
+                    {% endif %}
+                    {% if stats.neutral > 0 %}
+                    <div class="bar-segment bar-neutral" style="width: {{ (stats.neutral / stats.total * 100)|round(1) }}%;"></div>
+                    {% endif %}
+                    {% if stats.negative > 0 %}
+                    <div class="bar-segment bar-negative" style="width: {{ (stats.negative / stats.total * 100)|round(1) }}%;"></div>
+                    {% endif %}
+                </div>
+            </div>
+        </section>
+        {% endif %}
+
         <!-- News Focus Section -->
         {% if focus_data %}
         <section class="focus-section animate-fade-in" style="--delay: 0.35s">
