@@ -51,9 +51,21 @@
     <main class="dashboard">
         <!-- Dashboard Header & KPI -->
         <header class="dashboard-header animate-fade-in">
-            <div class="header-titles">
-                <h2 class="page-title">Apple 產品輿論監測系統</h2>
-                <p class="page-subtitle">AI 驅動的即時新聞分析與情緒判讀</p>
+            <div class="header-top-row">
+                <div class="header-titles">
+                    <h2 class="page-title">Apple 產品輿論監測系統</h2>
+                    <p class="page-subtitle">AI 驅動的即時新聞分析與情緒判讀</p>
+                </div>
+                
+                {% if history_files %}
+                <div class="history-selector">
+                    <select onchange="window.location.href=this.value" class="glass-select">
+                        {% for item in history_files %}
+                        <option value="{{ item.url }}" {% if selected_url == item.url %}selected{% endif %}>{{ item.label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                {% endif %}
             </div>
             
             {% if reports %}
@@ -101,6 +113,42 @@
             </div>
             {% endif %}
         </header>
+
+        <!-- News Focus Section -->
+        {% if focus_data %}
+        <section class="focus-section animate-fade-in" style="--delay: 0.35s">
+            <div class="section-heading">
+                <h3>即時新聞焦點</h3>
+                <div class="heading-line"></div>
+            </div>
+            <div class="focus-grid">
+                <div class="focus-card glass-panel positive-glow animate-slide-up" style="--delay: 0.4s">
+                    <div class="card-highlight"></div>
+                    <div class="focus-header">
+                        <span class="indicator-dot positive"></span>
+                        <h4 class="positive-text">正面焦點</h4>
+                    </div>
+                    <p class="focus-content">{{ focus_data.positive_focus }}</p>
+                </div>
+                <div class="focus-card glass-panel negative-glow animate-slide-up" style="--delay: 0.5s">
+                    <div class="card-highlight"></div>
+                    <div class="focus-header">
+                        <span class="indicator-dot negative"></span>
+                        <h4 class="negative-text">負面焦點</h4>
+                    </div>
+                    <p class="focus-content">{{ focus_data.negative_focus }}</p>
+                </div>
+                <div class="focus-card glass-panel neutral-glow animate-slide-up" style="--delay: 0.6s">
+                    <div class="card-highlight"></div>
+                    <div class="focus-header">
+                        <span class="indicator-dot neutral"></span>
+                        <h4 class="neutral-text">中立焦點</h4>
+                    </div>
+                    <p class="focus-content">{{ focus_data.neutral_focus }}</p>
+                </div>
+            </div>
+        </section>
+        {% endif %}
 
         <!-- Dynamic Feed -->
         <section class="feed-section">

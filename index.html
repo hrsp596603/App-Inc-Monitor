@@ -51,9 +51,25 @@
     <main class="dashboard">
         <!-- Dashboard Header & KPI -->
         <header class="dashboard-header animate-fade-in">
-            <div class="header-titles">
-                <h2 class="page-title">Apple 產品輿論監測系統</h2>
-                <p class="page-subtitle">AI 驅動的即時新聞分析與情緒判讀</p>
+            <div class="header-top-row">
+                <div class="header-titles">
+                    <h2 class="page-title">Apple 產品輿論監測系統</h2>
+                    <p class="page-subtitle">AI 驅動的即時新聞分析與情緒判讀</p>
+                </div>
+                
+                
+                <div class="history-selector">
+                    <select onchange="window.location.href=this.value" class="glass-select">
+                        
+                        <option value="index.html" selected>2026/03/30 (最新)</option>
+                        
+                        <option value="2026-03-26.html" >2026/03/26</option>
+                        
+                        <option value="2026-03-23.html" >2026/03/23</option>
+                        
+                    </select>
+                </div>
+                
             </div>
             
             
