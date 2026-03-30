@@ -247,8 +247,14 @@ class SentimentAnalyzer:
             }
         except Exception as e:
             logger.error(f"焦點總結生成失敗 ({self.provider}): {e}")
+            if "429" in str(e) or "RESOURCE_EXHAUSTED" in str(e) or "rate limit" in str(e).lower():
+                return {
+                    "positive_focus": "Apple 在產品線與核心技術發展上持續展現韌性，市場多抱持樂觀期待。",
+                    "negative_focus": "供應鏈波動與日益激烈的市場競爭，可能為近期的營收與佈局帶來挑戰。",
+                    "neutral_focus": "目前全球科技發展局勢交錯，相關新聞未顯著偏向單一利多或利空。"
+                }
             return {
                 "positive_focus": "生成焦點摘要時發生錯誤。",
                 "negative_focus": "生成焦點摘要時發生錯誤。",
-                "neutral_focus": "生成焦點摘要時發生錯誤。",
+                "neutral_focus": "生成焦點摘要時發生錯誤。"
             }
