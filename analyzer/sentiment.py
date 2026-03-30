@@ -82,9 +82,11 @@ class SentimentAnalyzer:
     def _call_llm(self, title: str, content: str) -> Dict[str, str]:
         prompt = f"""請針對以下 Apple Inc. 相關的英文新聞，完成兩件事：
 1. 情緒分析：分類為 'Positive'、'Negative' 或 'Neutral'。
-2. 翻譯：將標題和內容翻譯為「繁體中文」。
+2. 翻譯：務必將標題和內容「強制且完整地翻譯為繁體中文 (Traditional Chinese)」。不可保留英文原文（專有名詞如 Apple 等除外）。
 
-請以純 JSON 格式回覆(不要加 markdown code block)：
+這非常重要，請確保「title_zh」和「content_zh」兩者皆為繁體中文！
+
+請以純 JSON 格式回覆(絕對不要加 markdown code block)：
 {{"sentiment": "...", "title_zh": "...", "content_zh": "..."}}
 
 標題: {title}
@@ -104,12 +106,10 @@ class SentimentAnalyzer:
                 if raw is None:
                     raw = ""
                 raw = raw.strip()
-                # 處理可能的 markdown code block
-                if raw.startswith("```json"):
-                    raw = raw[7:]
-                if raw.endswith("```"):
-                    raw = raw[:-3]
-                raw = raw.strip()
+                import re
+                match = re.search(r"\{.*\}", raw, re.DOTALL)
+                if match:
+                    raw = match.group(0)
                 
             elif self.provider == "openai" and self.openai_client:
                 response_openai = self.openai_client.chat.completions.create(
@@ -123,6 +123,10 @@ class SentimentAnalyzer:
                 raw_content = response_openai.choices[0].message.content
                 if raw_content:
                     raw = raw_content.strip()
+                    import re
+                    match = re.search(r"\{.*\}", raw, re.DOTALL)
+                    if match:
+                        raw = match.group(0)
 
             # 嘗試解析 JSON
             result = json.loads(raw)
