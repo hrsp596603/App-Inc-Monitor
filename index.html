@@ -122,21 +122,26 @@
         
         <section class="sentiment-bar-section animate-fade-in" style="--delay: 0.3s">
             <div class="sentiment-bar-container glass-panel">
-                <div class="sentiment-bar-labels">
-                    <span class="positive-text">正面 5</span>
-                    <span class="neutral-text">中立 3</span>
-                    <span class="negative-text">負面 2</span>
+                <div class="sentiment-row">
+                    <div class="sentiment-label positive-text">正面</div>
+                    <div class="sentiment-track">
+                        <div class="sentiment-fill bar-positive" style="width: 50.0%;"></div>
+                    </div>
+                    <div class="sentiment-value positive-text">5</div>
                 </div>
-                <div class="sentiment-stacked-bar">
-                    
-                    <div class="bar-segment bar-positive" style="width: 50.0%;"></div>
-                    
-                    
-                    <div class="bar-segment bar-neutral" style="width: 30.0%;"></div>
-                    
-                    
-                    <div class="bar-segment bar-negative" style="width: 20.0%;"></div>
-                    
+                <div class="sentiment-row">
+                    <div class="sentiment-label neutral-text">中立</div>
+                    <div class="sentiment-track">
+                        <div class="sentiment-fill bar-neutral" style="width: 30.0%;"></div>
+                    </div>
+                    <div class="sentiment-value neutral-text">3</div>
+                </div>
+                <div class="sentiment-row">
+                    <div class="sentiment-label negative-text">負面</div>
+                    <div class="sentiment-track">
+                        <div class="sentiment-fill bar-negative" style="width: 20.0%;"></div>
+                    </div>
+                    <div class="sentiment-value negative-text">2</div>
                 </div>
             </div>
         </section>

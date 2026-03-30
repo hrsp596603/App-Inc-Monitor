@@ -118,21 +118,26 @@
         {% if stats.total > 0 %}
         <section class="sentiment-bar-section animate-fade-in" style="--delay: 0.3s">
             <div class="sentiment-bar-container glass-panel">
-                <div class="sentiment-bar-labels">
-                    <span class="positive-text">正面 {{ stats.positive }}</span>
-                    <span class="neutral-text">中立 {{ stats.neutral }}</span>
-                    <span class="negative-text">負面 {{ stats.negative }}</span>
+                <div class="sentiment-row">
+                    <div class="sentiment-label positive-text">正面</div>
+                    <div class="sentiment-track">
+                        <div class="sentiment-fill bar-positive" style="width: {{ (stats.positive / stats.total * 100)|round(1) }}%;"></div>
+                    </div>
+                    <div class="sentiment-value positive-text">{{ stats.positive }}</div>
                 </div>
-                <div class="sentiment-stacked-bar">
-                    {% if stats.positive > 0 %}
-                    <div class="bar-segment bar-positive" style="width: {{ (stats.positive / stats.total * 100)|round(1) }}%;"></div>
-                    {% endif %}
-                    {% if stats.neutral > 0 %}
-                    <div class="bar-segment bar-neutral" style="width: {{ (stats.neutral / stats.total * 100)|round(1) }}%;"></div>
-                    {% endif %}
-                    {% if stats.negative > 0 %}
-                    <div class="bar-segment bar-negative" style="width: {{ (stats.negative / stats.total * 100)|round(1) }}%;"></div>
-                    {% endif %}
+                <div class="sentiment-row">
+                    <div class="sentiment-label neutral-text">中立</div>
+                    <div class="sentiment-track">
+                        <div class="sentiment-fill bar-neutral" style="width: {{ (stats.neutral / stats.total * 100)|round(1) }}%;"></div>
+                    </div>
+                    <div class="sentiment-value neutral-text">{{ stats.neutral }}</div>
+                </div>
+                <div class="sentiment-row">
+                    <div class="sentiment-label negative-text">負面</div>
+                    <div class="sentiment-track">
+                        <div class="sentiment-fill bar-negative" style="width: {{ (stats.negative / stats.total * 100)|round(1) }}%;"></div>
+                    </div>
+                    <div class="sentiment-value negative-text">{{ stats.negative }}</div>
                 </div>
             </div>
         </section>
