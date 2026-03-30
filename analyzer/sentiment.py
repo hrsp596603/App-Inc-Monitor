@@ -70,6 +70,8 @@ class SentimentAnalyzer:
             return self._mock_analyze(items)
             
         for item in items:
+            import time
+            time.sleep(4)  # 避免 Gemini Free Tier Rate Limit (15 RPM)
             analysis = self._call_llm(item["title"], item["content"])
             enriched_item = item.copy()
             enriched_item["sentiment"] = analysis.get("sentiment", "Neutral")
@@ -171,3 +173,82 @@ class SentimentAnalyzer:
             enriched["content_zh"] = translation.get("content_zh", item["content"])
             results.append(enriched)
         return results
+
+    def generate_focus_summary(self, items: List[Dict]) -> Dict[str, str]:
+        """
+        傳入所有已分析的文章，要求 LLM 統整出 正面、負面、中立 的核心焦點
+        """
+        if not self.provider:
+            return {
+                "positive_focus": "無顯著正面情報（開發模式模擬）。",
+                "negative_focus": "無顯著負面情報（開發模式模擬）。",
+                "neutral_focus": "無顯著中立情報（開發模式模擬）。"
+            }
+            
+        # 準備內文給 LLM
+        articles_text = ""
+        for i, item in enumerate(items):
+            s = item.get("sentiment", "Neutral")
+            t = item.get("title_zh", item.get("title", ""))
+            c = item.get("content_zh", item.get("content", ""))
+            articles_text += f"[{i+1}] 情緒:{s} | 標題:{t} | 摘要:{c[:150]}\n"
+            
+        prompt = f"""請閱讀以下 Apple Inc. 相關的新聞列表，並分別總結出「正面焦點」、「負面焦點」與「中立焦點」。
+如果某個面向完全沒有相關新聞（例如完全沒有正面新聞），請回覆「目前無顯著正面情報」。
+每個焦點的總結大約 1 到 2 句話，務必精煉且直接切入重點。使用繁體中文回覆。
+
+請務必以純 JSON 格式回覆(絕對不要加 markdown code block)：
+{{"positive_focus": "...", "negative_focus": "...", "neutral_focus": "..."}}
+
+新聞列表：
+{articles_text}
+"""
+        raw = ""
+        try:
+            if self.provider == "gemini" and self.gemini_client and genai_types:
+                response = self.gemini_client.models.generate_content(
+                    model="gemini-2.5-flash",
+                    contents=prompt,
+                    config=genai_types.GenerateContentConfig(
+                        temperature=0.0,
+                    ),
+                )
+                raw = response.text
+                if raw is None:
+                    raw = ""
+                raw = raw.strip()
+                import re
+                match = re.search(r"\{.*\}", raw, re.DOTALL)
+                if match:
+                    raw = match.group(0)
+                
+            elif self.provider == "openai" and self.openai_client:
+                response_openai = self.openai_client.chat.completions.create(
+                    model="gpt-3.5-turbo",
+                    messages=[
+                        {"role": "system", "content": "You are a helpful summarizer. Always respond in valid JSON only."},
+                        {"role": "user", "content": prompt}
+                    ],
+                    temperature=0.0
+                )
+                raw_content = response_openai.choices[0].message.content
+                if raw_content:
+                    raw = raw_content.strip()
+                    import re
+                    match = re.search(r"\{.*\}", raw, re.DOTALL)
+                    if match:
+                        raw = match.group(0)
+
+            result = json.loads(raw)
+            return {
+                "positive_focus": result.get("positive_focus", "分析失敗或無資料。"),
+                "negative_focus": result.get("negative_focus", "分析失敗或無資料。"),
+                "neutral_focus": result.get("neutral_focus", "分析失敗或無資料。"),
+            }
+        except Exception as e:
+            logger.error(f"焦點總結生成失敗 ({self.provider}): {e}")
+            return {
+                "positive_focus": "生成焦點摘要時發生錯誤。",
+                "negative_focus": "生成焦點摘要時發生錯誤。",
+                "neutral_focus": "生成焦點摘要時發生錯誤。",
+            }
